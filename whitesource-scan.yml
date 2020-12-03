@@ -1,0 +1,30 @@
+parameters:
+  - name: serviceName
+    type: string
+  - name: whitesourceApiKey
+    type: string
+  - name: whitesourceUserKey
+    type: string
+  - name: whitesourceProjectToken
+    type: string
+
+
+steps:
+  - script: 'curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar'
+    displayName: 'Download the latest Unified Agent'
+
+  - script: 'java -jar wss-unified-agent.jar -c $(Build.SourcesDirectory)/wss-unified-agent.config -apiKey ${{ parameters.whitesourceApiKey }} -project ${{ parameters.serviceName }}'
+    displayName: 'Run Unified Agent Scan'
+
+  - task: PowerShell@2
+    inputs:
+      targetType: 'filePath'
+      filePath: $(Build.SourcesDirectory)/Find-MajorAlerts.ps1
+      arguments: > # Use this to avoid newline characters in multiline string
+        -UserKey $env:whitesourceUserKey
+        -ProjectToken $env:whitesourceProjectToken
+    displayName: 'Check WhiteSource for Major Alerts'
+    env:
+      whitesourceUserKey:  ${{ parameters.whitesourceUserKey }}
+      whitesourceProjectToken: ${{ parameters.whitesourceProjectToken }}
+

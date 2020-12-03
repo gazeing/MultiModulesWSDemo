@@ -1,0 +1,92 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    flavorDimensions "dimen1", "dimen2"
+    productFlavors {
+        client1 {
+            dimension "dimen1"
+        }
+        client2 {
+            dimension "dimen1"
+        }
+        client3 {
+            dimension "dimen1"
+        }
+        env1 {
+            dimension "dimen2"
+        }
+        env2 {
+            dimension "dimen2"
+        }
+        env3 {
+            dimension "dimen2"
+        }
+    }
+}
+
+dependencies {
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation(project(':common'))
+
+    //Navigation
+    implementation commonDependencies.cicerone
+
+    //DI
+    implementation commonDependencies.toothpick
+    implementation commonDependencies.smoothie
+    kapt commonDependencies.tp_compiler
+
+    //Network
+    implementation commonDependencies.retrofit
+    implementation commonDependencies.gson
+    implementation commonDependencies.rxjava_adapter
+    implementation commonDependencies.okhttp_logger
+
+    implementation commonDependencies.glide
+    kapt commonDependencies.glide_kapt
+
+    implementation commonDependencies.timber
+
+    implementation commonDependencies.appCompat
+    implementation commonDependencies.constraint
+    implementation commonDependencies.kotlin
+
+    implementation commonDependencies.lifecycleExt
+
+    //test libraries
+    testImplementation(project(':commontest'))
+    androidTestImplementation testLibs.androidXJunit
+    androidTestImplementation testLibs.espressoCore
+}

@@ -1,0 +1,116 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
+
+    defaultConfig {
+        applicationId "com.demo.whitesource"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        debug {
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    flavorDimensions "dimen1", "dimen2"
+    productFlavors {
+        client1 {
+            dimension "dimen1"
+            manifestPlaceholders.AppName = "Client1"
+            applicationId "com.demo.whitesource"
+        }
+        client2 {
+            dimension "dimen1"
+            manifestPlaceholders.AppName = "Client2"
+            applicationId "com.demo.whitesource.client"
+        }
+        client3 {
+            dimension "dimen1"
+            manifestPlaceholders.AppName = "Client3"
+            applicationId "com.demo.whitesource.anotherclient"
+        }
+        env1 {
+            dimension "dimen2"
+            manifestPlaceholders.AppNameSuffix = " ENV1"
+            versionNameSuffix " ENV1"
+            applicationIdSuffix ".env1"
+        }
+        env2 {
+            dimension "dimen2"
+            manifestPlaceholders.AppNameSuffix = " ENV2"
+            versionNameSuffix " ENV2"
+            applicationIdSuffix ".env2"
+        }
+        env3 {
+            dimension "dimen2"
+            manifestPlaceholders.AppNameSuffix = " ENV3"
+            versionNameSuffix " ENV3"
+            applicationIdSuffix ".env3"
+        }
+    }
+
+}
+
+dependencies {
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+
+    implementation commonDependencies.lifecycleExt
+
+    implementation commonDependencies.appCompat
+    implementation commonDependencies.material
+
+    implementation project(':common')
+    implementation project(':ModuleA')
+    implementation project(':ModuleB')
+    implementation project(':ModuleC')
+    implementation project(':ModuleD')
+
+    implementation commonDependencies.rxjava
+
+    implementation commonDependencies.timber
+    implementation commonDependencies.toothpick
+    kapt commonDependencies.tp_compiler
+
+    //to init glide logs
+    implementation commonDependencies.glide
+    kapt commonDependencies.glide_kapt
+
+    implementation commonDependencies.fb_core
+    implementation commonDependencies.fb_messaging
+
+
+    //test libraries
+    testImplementation(project(':commontest'))
+    androidTestImplementation testLibs.androidXJunit
+    androidTestImplementation testLibs.androidXTestCore
+    androidTestImplementation testLibs.androidXTestRule
+    androidTestImplementation testLibs.androidXTestRunner
+    androidTestImplementation testLibs.espressoCore
+    androidTestImplementation testLibs.fragmentTesting
+    androidTestImplementation testLibs.kakao
+    androidTestImplementation testLibs.mockWebServer
+}

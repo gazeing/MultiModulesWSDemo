@@ -1,0 +1,8 @@
+include ':ModuleD'
+include ':ModuleC'
+include ':ModuleB'
+include ':ModuleA'
+include ':common'
+include ':commontest'
+include ':app'
+rootProject.name = "WsDemo"
